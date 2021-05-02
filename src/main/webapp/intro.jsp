@@ -299,7 +299,7 @@
 
 
 			<div class="sub-right">
-				<h3 style="margin-bottom: 0;">캡스톤디자인</h3>
+				<h3>캡스톤디자인</h3>
 				<div class="sub7_tab_menu" style="text-align: center;">
 					<a href="/WebProject1/intro.jsp" class="sub7_tab check" style="display: inline-block;">소개</a>
 					<a href="/WebProject1/list.jsp?categoryname=notice" class="sub7_tab" style="display: inline-block;">공지사항</a>
