@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.24, for Win64 (x86_64)
 --
 -- Host: localhost    Database: test
 -- ------------------------------------------------------
--- Server version	8.0.23
+-- Server version	8.0.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,7 +32,7 @@ CREATE TABLE `post` (
   `category` varchar(10) NOT NULL,
   PRIMARY KEY (`no`),
   UNIQUE KEY `postid_UNIQUE` (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='게시물 DB';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='게시물 DB';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요');
+INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요'),(10,'오늘날짜 테스트 공지사항','test','2021-05-02',3,NULL,'공지사항'),(11,'오늘날짜 테스트 서식','test','2021-05-02',6,NULL,'서식'),(12,'오늘날짜 테스트2 서식','test','2021-05-02',2,NULL,'서식');
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `user` (
   `upasswd` varchar(20) NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `uid_UNIQUE` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-02 14:26:42
+-- Dump completed on 2021-05-02 18:00:15
