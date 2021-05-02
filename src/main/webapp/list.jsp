@@ -150,6 +150,7 @@
 					</c:forEach>		
 				</div>
 					
+<!-- rownum는 넘버링 용도로 사용됨 -->
 <sql:query var="rs" dataSource="jdbc/mydb">
 select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 from post, (SELECT @rownum:=0) as r
