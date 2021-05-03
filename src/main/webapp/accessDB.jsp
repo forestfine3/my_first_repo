@@ -9,6 +9,14 @@
 <head><title>게시판 DB 관리 페이지</title></head>
 
 <body>
+<c:set var="dbSelect" value="${param.dbSelect}"/>
+<h1>DB Select: ${dbSelect}</h1>
+<form method="post" action="accessDB.jsp">
+<input type="radio" name=dbSelect value="post">post
+<input type="radio" name=dbSelect value="posttext">posttext 
+<input type="submit" value="Select">
+</form>
+
 <sql:query var="post" dataSource="jdbc/mydb">
 SELECT * FROM post
 </sql:query>
@@ -17,19 +25,32 @@ SELECT * FROM post
 SELECT * FROM posttext
 </sql:query>
 
+<!-- 속성명 출력을 위한 DB -->
+<c:choose>
+<c:when test="${dbSelect == 'posttext'}">
+<sql:query var="postheader" dataSource="jdbc/mydb">
+show full columns from posttext
+</sql:query>
+</c:when>
+<c:otherwise>
+<sql:query var="postheader" dataSource="jdbc/mydb">
+show full columns from post
+</sql:query>
+</c:otherwise>
+</c:choose>
+
 <h3>게시물 DB</h3>
 <table border=1>
 <tr>
-<th>no</th>
-<th>title</th>
-<th>writer</th>
-<th>register_date</th>
-<th>hits</th>
-<th>attach</th>
-<th>category</th>
+<c:forEach var="row" items="${postheader.rows}">
+<th>${row.Field}</th>
+</c:forEach>
 </tr>
-<c:forEach var="row" items="${post.rows}">
 <tr>
+
+<c:choose>
+<c:when test="${dbSelect == 'post'}">
+<c:forEach var="row" items="${post.rows}">
 <td>${row.no}</td>
 <td>${row.title}</td>
 <td>${row.writer}</td>
@@ -39,6 +60,18 @@ SELECT * FROM posttext
 <td>${row.category}</td>
 </tr>
 </c:forEach>
+</c:when>
+<c:when test="${dbSelect == 'posttext'}">
+<c:forEach var="row" items="${posttext.rows}">
+<td>${row.textno}</td>
+<td>${row.no}</td>
+<td>${row.text}</td>
+
+</tr>
+</c:forEach>
+</c:when>
+
+</c:choose>
 </table>
 
 </body>
