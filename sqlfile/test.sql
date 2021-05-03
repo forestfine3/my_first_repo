@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.24, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
 --
 -- Host: localhost    Database: test
 -- ------------------------------------------------------
--- Server version	8.0.24
+-- Server version	8.0.23
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,7 +32,7 @@ CREATE TABLE `post` (
   `category` varchar(10) NOT NULL,
   PRIMARY KEY (`no`),
   UNIQUE KEY `postid_UNIQUE` (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='게시물 DB';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='게시물 DB';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,8 +41,35 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요'),(10,'오늘날짜 테스트 공지사항','test','2021-05-02',3,NULL,'공지사항'),(11,'오늘날짜 테스트 서식','test','2021-05-02',6,NULL,'서식'),(12,'오늘날짜 테스트2 서식','test','2021-05-02',2,NULL,'서식');
+INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요'),(10,'오늘날짜 테스트 공지사항','test','2021-05-02',3,NULL,'공지사항'),(11,'오늘날짜 테스트 서식','test','2021-05-02',6,NULL,'서식'),(12,'오늘날짜 테스트2 서식','test','2021-05-02',2,NULL,'서식'),(13,'totay cnt test','test','2021-05-03',0,'a.txt','공지사항');
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posttext`
+--
+
+DROP TABLE IF EXISTS `posttext`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `posttext` (
+  `textno` int NOT NULL,
+  `no` int NOT NULL,
+  `text` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`textno`),
+  KEY `no` (`no`),
+  CONSTRAINT `posttext_ibfk_1` FOREIGN KEY (`no`) REFERENCES `post` (`no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `posttext`
+--
+
+LOCK TABLES `posttext` WRITE;
+/*!40000 ALTER TABLE `posttext` DISABLE KEYS */;
+INSERT INTO `posttext` VALUES (1,1,'외래키 제약조건은 한 마디로 말해서 두 테이블간의 관계를 선언하여 데이터간의 무결성을 보장해주는 역할을 합니다. 즉 외래키 관계를 설정하면 하나의 테이블이 다른 테이블에 의존하는 형태입니다.');
+/*!40000 ALTER TABLE `posttext` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -58,7 +85,7 @@ CREATE TABLE `user` (
   `upasswd` varchar(20) NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `uid_UNIQUE` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-02 18:00:15
+-- Dump completed on 2021-05-03 10:58:05
