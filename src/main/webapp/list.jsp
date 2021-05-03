@@ -9,41 +9,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>목포대학교 링크플러스사업단</title>
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/earlyaccess/notosanskr.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/reset.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/common.css"
->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/css/swiper.min.css"
->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/style.css"
->
-<link
-	href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&amp;display=swap"
-	rel="stylesheet"
->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/js/swiper.js"
-></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/common.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/css/swiper.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/js/swiper.js"></script>
 <script src="/WebProject1/js/jquery.min.js"></script>
 <script src="/WebProject1/js/script.js"></script>
 </head>
 
 <body class="">
         <div id="wrap" class="main">
-            <header id="header" class="header">
-            
+            <header id="header" class="header">      
             <script>
                     var news = new Swiper('.news .swiper-container', {
                         direction : 'vertical',
@@ -69,12 +50,8 @@
                     })
                     //
                 </script>
-            </header> <div id="container" class="container" style="margin-top: 0px;">
-            <!-- 
-            <div class="sub-title">
-			<h2>교육프로그램</h2>
-		    </div>
-		     -->
+            </header>
+     <div id="container" class="container" style="margin-top: 0px;">
 		<div class="page-nav">
 			<ul>
 				<li><i class="fa fa-home" aria-hidden="true"></i></li>
@@ -118,11 +95,8 @@
 </style>
 		<div class="sub-right">
 					<h3>캡스톤디자인</h3>
-					<div class="sub7_tab_menu" style="text-align: center;">
-					
+					<div class="sub7_tab_menu" style="text-align: center;">					
 					<a href="/WebProject1/intro.jsp" class="sub7_tab" style="display: inline-block;">소개</a>
-					
-					
 					<%
 					// 카테고리를 순서대로 출력하기 위해 LinkedHashMap 타입으로 데이터 저장
 					LinkedHashMap map = new LinkedHashMap();
@@ -135,8 +109,7 @@
 					<c:set var="cateMap" value="<%=map %>"/>
 					<c:set var="category" value="${param.categoryname}"/>
 					<c:set var="catename" value="${cateMap[category]}"/>
-
-					
+			
 					<!-- 카테고리 버튼 순서대로 출력 -->
 					<c:forEach var="i" items="${cateMap}">
 					<c:choose>
@@ -178,11 +151,9 @@ order by rownum desc
 						<div class="page-info">
 
 <!-- 읽어온 게시물 수를 출력 -->
-							
 <!-- 오늘날짜 출력 쿼리 -->
 <c:set var="today" value="<%=new java.util.Date() %>" />
 <fmt:formatDate var="now" type="date" value="${today}" pattern="yyyy-MM-dd" />
-
 <sql:query var="todaycnt" dataSource="jdbc/mydb">
 select count(*) as cnt
 from post where category=? and register_date=?
@@ -193,8 +164,7 @@ from post where category=? and register_date=?
 							<strong>
 							<c:forEach var="row" items="${todaycnt.rows}">${row.cnt}</c:forEach>
 							</strong>건</span>
-					
-							
+
 <!-- 총 게시물 수 출력 쿼리 -->
 <sql:query var="totalcnt" dataSource="jdbc/mydb">
 select count(*) as cnt
@@ -278,9 +248,5 @@ from post where category=?
 					</div>
 					</c:otherwise>
 					</c:choose>
-            
         </div>
-        
-        
-         
 </body>
