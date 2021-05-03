@@ -7,14 +7,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html>
+<c:set var="postno" value="${param.postno}"/>
 <!-- 게시물 DB -->
 <sql:query var="list" dataSource="jdbc/mydb">
 select no, title, writer, register_date, hits
 from post
-where no=1
+where no=?
+<sql:param value="${postno}"/>
 </sql:query>
 <c:forEach var="row" items="${list.rows}">
-<c:set var="postno" value="${row.no}"/>
 <c:set var="title" value="${row.title}"/>
 <c:set var="writer" value="${row.writer}"/>
 <c:set var="wdate" value="${row.register_date}"/>
@@ -25,7 +26,8 @@ where no=1
 <sql:query var="post" dataSource="jdbc/mydb">
 select no, text
 from posttext
-where no=1
+where no=?
+<sql:param value="${postno}"/>
 </sql:query>
 <c:forEach var="row" items="${post.rows}">
 <c:set var="text" value="${row.text}"/>
