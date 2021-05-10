@@ -140,6 +140,7 @@ order by no desc
 					%>
 					<c:set var="cateMap" value="<%=map %>"/>
 					<c:set var="category" value="${param.categoryname}"/>
+					<c:set var="catename" value="${cateMap[category]}"/>
 					
 					<!-- 카테고리 버튼 순서대로 출력 -->
 					<c:forEach var="i" items="${cateMap}">
@@ -153,6 +154,18 @@ order by no desc
 					</c:choose>
 					</c:forEach>		
 				</div>
+				
+				
+<!-- rownum는 넘버링 용도로 사용됨 -->
+<sql:query var="rs" dataSource="jdbc/mydb">
+select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+from post, (SELECT @rownum:=0) as r
+where category=?
+order by rownum desc
+<sql:param value="${catename}"/>
+</sql:query>
+				
+				
 				<div class="board-search">
 						<form name="search" style="margin: 0;"get">
 							<div class="search-con">
@@ -170,31 +183,32 @@ order by no desc
 							</div>
 						</form>
 						<div class="page-info">
-							<!-- 읽어온 게시물 수를 출력 -->
-							<c:set var="today" value="<%=new java.util.Date() %>" />
-							<fmt:formatDate var="now" type="date" value="${today}" pattern="yyyy-MM-dd" />
-							
-							<!-- 전달받은 카테고리 파라미터 저장 -->
-							<c:set var="category" value="${param.categoryname}"/>
-							
-							<span>${cateMap['notice']} 오늘 : <strong>
-							<% int nowcount = 0; %>
-								<c:forEach var="row" items="${rs.rows}">
-									<c:if test="${row.category == category &&  row.register_date >= now }">
-										<% nowcount += 1; %>
-									</c:if>
-								</c:forEach>
-							<% out.print(nowcount); %>
-							</strong> 건 </span>
-							<span>총 : <strong>
-							<% int totalcount = 0; %>
-								<c:forEach var="row" items="${rs.rows}">
-									<c:if test="${row.category == category}">
-										<% totalcount += 1; %>
-									</c:if>
-								</c:forEach>
-							<% out.print(totalcount); %>
-							</strong> 건</span>
+						
+<!-- 읽어온 게시물 수를 출력 -->
+<!-- 오늘날짜 출력 쿼리 -->
+<c:set var="today" value="<%=new java.util.Date() %>" />
+<fmt:formatDate var="now" type="date" value="${today}" pattern="yyyy-MM-dd" />
+<sql:query var="todaycnt" dataSource="jdbc/mydb">
+select count(*) as cnt
+from post where category=? and register_date=?
+<sql:param value="${catename}"/>
+<sql:param value="${now}"/>
+</sql:query>
+							<span>오늘 :
+							<strong>
+							<c:forEach var="row" items="${todaycnt.rows}">${row.cnt}</c:forEach>
+							</strong>건</span>
+
+<!-- 총 게시물 수 출력 쿼리 -->
+<sql:query var="totalcnt" dataSource="jdbc/mydb">
+select count(*) as cnt
+from post where category=?
+<sql:param value="${catename}"/>
+</sql:query>
+							<span>총 :
+							<strong>
+							<c:forEach var="row" items="${totalcnt.rows}">${row.cnt}</c:forEach>
+							</strong>건</span>
 						</div>
 					</div>
 					<c:choose>
@@ -241,14 +255,16 @@ order by no desc
 								</c:if>
 								<div class="th th-cell06">첨부</div>
 							</li>
+							
 							<c:forEach var="row" items="${rs.rows}">
-								<c:if test="${row.category == '공지사항'}">
+								<c:if test="${row.category == catename}">
 									<li class="table-body-row">
-										<div class="td td-cell01">${row.no}</div>
+										<div class="td td-cell01">${row.rownum}</div>
 										<c:if test="${category == 'docu'}">
 										<div class="td td-cell01">${row.category}</div>
 										</c:if>
-										<div class="td td-cell02" style="text-align: left">${row.title}</div>
+										<div class="td td-cell02" style="text-align: left">
+										<a href="/WebProject1/read.jsp?postno=${row.no}&categoryname=${category}">${row.title}</a></div>
 										<div class="td td-cell03">${row.writer}</div>
 										<div class="td td-cell04">${row.register_date}</div>
 										<c:if test="${category == 'docu' or category == 'notice'}">
