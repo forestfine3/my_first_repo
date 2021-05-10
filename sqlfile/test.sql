@@ -68,7 +68,7 @@ CREATE TABLE `posttext` (
 
 LOCK TABLES `posttext` WRITE;
 /*!40000 ALTER TABLE `posttext` DISABLE KEYS */;
-INSERT INTO `posttext` VALUES (1,1,'외래키 제약조건은 한 마디로 말해서 두 테이블간의 관계를 선언하여 데이터간의 무결성을 보장해주는 역할을 합니다. 즉 외래키 관계를 설정하면 하나의 테이블이 다른 테이블에 의존하는 형태입니다.');
+INSERT INTO `posttext` VALUES (1,1,'외래키 제약조건은 한 마디로 말해서 두 테이블간의 관계를 선언하여 데이터간의 무결성을 보장해주는 역할을 합니다. 즉 외래키 관계를 설정하면 하나의 테이블이 다른 테이블에 의존하는 형태입니다.'),(2,2,'내용2'),(3,3,'공지사항3'),(4,4,'공지사항4'),(5,5,'공지사항 내용'),(6,6,'내용'),(7,7,'내용1'),(8,8,'내용2'),(9,9,'내용3'),(10,10,'내용4'),(11,11,'내용5'),(12,12,'내용6'),(13,13,'내용7');
 /*!40000 ALTER TABLE `posttext` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-03 10:58:05
+-- Dump completed on 2021-05-10  9:49:56
