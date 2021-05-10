@@ -23,6 +23,6 @@ select uname from login where uid=? and upasswd=?
 '${uname}'님 환영합니다.
 </c:otherwise>
 </c:choose>
-<a href="list.jsp">홈페이지로 이동</a>
+<a href="list.jsp?categoryname=notice">홈페이지로 이동</a>
 </body>
 </html>
