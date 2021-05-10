@@ -230,7 +230,7 @@ from post where category=?
 										<div class="td td-cell01">${row.category}</div>
 										</c:if>
 										<div class="td td-cell02" style="text-align: left">
-										<a href="/WebProject1/read.jsp?postno=${row.no}">${row.title}</a></div>
+										<a href="/WebProject1/read.jsp?postno=${row.no}&categoryname=${category}">${row.title}</a></div>
 										<div class="td td-cell03">${row.writer}</div>
 										<div class="td td-cell04">${row.register_date}</div>
 										<c:if test="${category == 'docu' or category == 'notice'}">
