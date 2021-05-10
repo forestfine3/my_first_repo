@@ -12,10 +12,15 @@
 <c:set var="dbSelect" value="${param.dbSelect}"/>
 <h1>DB Select: ${dbSelect}</h1>
 <form method="post" action="accessDB.jsp">
-<input type="radio" name=dbSelect value="post">post
-<input type="radio" name=dbSelect value="posttext">posttext 
-<input type="submit" value="Select">
+DB: <input type="radio" name=dbSelect value="post">post
+<input type="radio" name=dbSelect value="posttext">posttext
+<br>
+select no: <input type="number" min=1 name="no" style="width:60px;">
+count: <input type="number" name="cnt" style="width:60px;">
+<input type="submit" value="PUSH">
 </form>
+
+
 
 <sql:query var="post" dataSource="jdbc/mydb">
 SELECT * FROM post
@@ -39,7 +44,8 @@ show full columns from post
 </c:otherwise>
 </c:choose>
 
-<h3>게시물 DB</h3>
+<c:if test="${dbSelect == 'post'}"><h3>게시물 DB</h3></c:if>
+<c:if test="${dbSelect == 'posttext'}"><h3>게시물 내용 DB</h3></c:if>
 <table border=1>
 <tr>
 <c:forEach var="row" items="${postheader.rows}">
