@@ -8,6 +8,7 @@
 
 <html>
 <c:set var="postno" value="${param.postno}"/>
+<c:set var="categoryname" value="${param.categoryname}"/>
 <!-- 게시물 DB -->
 <sql:query var="list" dataSource="jdbc/mydb">
 select no, title, writer, register_date, hits
@@ -35,10 +36,10 @@ where no=?
 
 
 <head><title>게시물 내용 읽기</title></head>
-<h3> ${title}</h3>
+<h1>제목: ${title}</h3>
 <h2> 게시물 번호: ${postno} | 작성자: ${writer}| 작성일: ${wdate} | 조회수: ${hits} </h2>
 <body>
 ${text}<br><br>
-이전으로
+<h3><a href="/WebProject1/list.jsp?&categoryname=${categoryname}">목록</a> 수정 삭제</h3>
 </body>
 </html>
