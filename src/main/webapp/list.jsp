@@ -1,54 +1,30 @@
 <%@ page contentType="text/html;charset=utf-8" import="java.util.*" %>
 
-<%-- fmt태그 사용 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%-- DB 연동--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<sql:query var="rs" dataSource="jdbc/mydb">
-select no, title, writer, register_date, hits, category, attach from test.post
-order by no desc
-</sql:query>
 
 <!DOCTYPE html>
 <html>
 <head>
 
 <title>목포대학교 링크플러스사업단</title>
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/earlyaccess/notosanskr.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/reset.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/common.css"
->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/css/swiper.min.css"
->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
->
-<link rel="stylesheet" type="text/css"
-	href="/WebProject1/css/style.css"
->
-<link
-	href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&amp;display=swap"
-	rel="stylesheet"
->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/js/swiper.js"
-></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/common.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/css/swiper.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/WebProject1/css/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&amp;display=swap">
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.0/js/swiper.js"></script>
 <script src="/WebProject1/js/jquery.min.js"></script>
 <script src="/WebProject1/js/script.js"></script>
+
 </head>
 
 <body class="">
         <div id="wrap" class="main">
             <header id="header" class="header">
-            
             <script>
                     var news = new Swiper('.news .swiper-container', {
                         direction : 'vertical',
@@ -70,7 +46,6 @@ order by no desc
                             news.autoplay.start();
                             this.classList.add("on");
                         }
-                        
                     })
                     //
                 </script>
@@ -85,7 +60,7 @@ order by no desc
 				<li><i class="fa fa-home" aria-hidden="true"></i></li>
 				<li>교육프로그램</li>
 				<li>캡스톤디자인</li>
-<li><a href="login.jsp"><i class="i-login"></i>로그인</a></li>
+                <li><a href="login.jsp"><i class="i-login"></i>로그인</a></li>
 			</ul>
 		</div>
 		<div style="clear:both"></div>
@@ -125,10 +100,8 @@ order by no desc
 		<div class="sub-right">
 					<h3>캡스톤디자인</h3>
 					<div class="sub7_tab_menu" style="text-align: center;">
-					
 					<a href="/WebProject1/intro.jsp" class="sub7_tab" style="display: inline-block;">소개</a>
-					
-					
+
 					<%
 					// 카테고리를 순서대로 출력하기 위해 LinkedHashMap 타입으로 데이터 저장
 					LinkedHashMap map = new LinkedHashMap();
@@ -140,34 +113,71 @@ order by no desc
 					%>
 					<c:set var="cateMap" value="<%=map %>"/>
 					<c:set var="category" value="${param.categoryname}"/>
+					<c:set var="option" value="${param.option}"/>
 					<c:set var="catename" value="${cateMap[category]}"/>
+					<c:set var="word" value="${param.word}"/>
 					
-					<!-- 카테고리 버튼 순서대로 출력 -->
+					<%-- 카테고리 버튼 순서대로 출력 --%>
 					<c:forEach var="i" items="${cateMap}">
-					<c:choose>
-					<c:when test="${category == i.key}">
-					<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
-					</c:when>
-					<c:otherwise>
-					<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
-					</c:otherwise>
-					</c:choose>
+				    	<c:choose>
+					        <c:when test="${category == i.key}">
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
+							</c:when>
+							<c:otherwise>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>		
-				</div>
-				
-				
-<!-- rownum는 넘버링 용도로 사용됨 -->
-<sql:query var="rs" dataSource="jdbc/mydb">
-select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
-from post, (SELECT @rownum:=0) as r
-where category=?
-order by rownum desc
-<sql:param value="${catename}"/>
-</sql:query>
-				
+				</div>				
+<%--
+**** 검색을 한 경우 불러오는 게시물 DB
+**** rownum는 넘버링 용도로 사용됨
+--%>
+<c:choose>
+	<c:when test ="${option == 'title'}">
+		<sql:query var="rs" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=? and title like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'content'}">
+		<sql:query var="rs" dataSource="jdbc/mydb">
+			select post.no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r, posttext
+			where post.no=posttext.no and
+   			   category=? and posttext.text like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'manager'}">
+		<sql:query var="rs" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=? and writer=?
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="${word}"/>
+		</sql:query>
+	</c:when>
+	<c:otherwise>
+		<sql:query var="rs" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=?
+			order by rownum desc
+			<sql:param value="${catename}"/>
+		</sql:query>
+	</c:otherwise>
+</c:choose>
 				
 				<div class="board-search">
-						<form name="search" style="margin: 0;"get">
+						<form name="search" style="margin: 0;"get";>
 							<div class="search-con">
 								<select name="option">
 									<option value="title">제목</option>
@@ -175,6 +185,7 @@ order by rownum desc
 									<option value="manager">담당자</option>
 								</select>
 							</div>
+							<input type="hidden" name="categoryname" value="${category}">
 							<div class="search-input">
 								<input type="text" name="word" placeholder="검색 내용을 입력해주세요"
 									pattern="{2,}" required
@@ -184,27 +195,96 @@ order by rownum desc
 						</form>
 						<div class="page-info">
 						
-<!-- 읽어온 게시물 수를 출력 -->
-<!-- 오늘날짜 출력 쿼리 -->
+<%-- 읽어온 게시물 수를 출력 --%>
+<%-- 오늘날짜 출력 쿼리 --%>
 <c:set var="today" value="<%=new java.util.Date() %>" />
 <fmt:formatDate var="now" type="date" value="${today}" pattern="yyyy-MM-dd" />
-<sql:query var="todaycnt" dataSource="jdbc/mydb">
-select count(*) as cnt
-from post where category=? and register_date=?
-<sql:param value="${catename}"/>
-<sql:param value="${now}"/>
-</sql:query>
+
+<c:choose>
+	<c:when test ="${option == 'title'}">
+		<sql:query var="todaycnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=? and title like(?) and register_date=?
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		<sql:param value="${now}"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'content'}">
+		<sql:query var="todaycnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post, posttext
+			where post.no=posttext.no and category=? and posttext.text like(?) and register_date=?
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		<sql:param value="${now}"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'manager'}">
+		<sql:query var="todaycnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=? and writer=? and register_date=?
+		<sql:param value="${catename}"/>
+		<sql:param value="${word}"/>
+		<sql:param value="${now}"/>
+		</sql:query>
+	</c:when>
+	<c:otherwise>
+		<sql:query var="todaycnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=? and register_date=?
+			<sql:param value="${catename}"/>
+			<sql:param value="${now}"/>
+		</sql:query>
+	</c:otherwise>
+</c:choose>
+
 							<span>오늘 :
 							<strong>
 							<c:forEach var="row" items="${todaycnt.rows}">${row.cnt}</c:forEach>
 							</strong>건</span>
 
-<!-- 총 게시물 수 출력 쿼리 -->
-<sql:query var="totalcnt" dataSource="jdbc/mydb">
-select count(*) as cnt
-from post where category=?
-<sql:param value="${catename}"/>
-</sql:query>
+<%-- 총 게시물 수 출력 쿼리 --%>
+<c:choose>
+	<c:when test ="${option == 'title'}">
+		<sql:query var="totalcnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=? and title like(?)
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'content'}">
+		<sql:query var="totalcnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post, posttext
+			where post.no=posttext.no and category=? and posttext.text like(?)
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'manager'}">
+		<sql:query var="totalcnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=? and writer=?
+		<sql:param value="${catename}"/>
+		<sql:param value="${word}"/>
+		</sql:query>
+	</c:when>
+	<c:otherwise>
+		<sql:query var="totalcnt" dataSource="jdbc/mydb">
+			select count(*) as cnt
+			from post
+			where category=?
+			<sql:param value="${catename}"/>
+		</sql:query>
+	</c:otherwise>
+</c:choose>
 							<span>총 :
 							<strong>
 							<c:forEach var="row" items="${totalcnt.rows}">${row.cnt}</c:forEach>
@@ -283,9 +363,5 @@ from post where category=?
 					</div>
 					</c:otherwise>
 					</c:choose>
-            
         </div>
-        
-        
-         
 </body>
