@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" import="java.util.*" %>
+<%@ page import="java.lang.Math.*" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
@@ -405,28 +406,53 @@
 					</div>
 					</c:otherwise>
 					</c:choose>
-					<c:set var="maxlist" value="${2}"/>
-					<c:set var="maxpost" value="${ 5 - ( maxlist * (page-1) ) }"/>
-					<c:set var="minpost" value="${ maxpost - maxlist - 1 }"/>
-					<c:set var="totalpage" value="${maxpost/maxlist}"/>
+					<c:set var="maxlists" value="2"/>
+					<c:forEach var="row" items="${totalcnt.rows}">
+					<c:set var="maxno" value="${row.cnt}"/>
+					</c:forEach>
+					<c:set var="maxpostno" value="${maxno - (maxlists*(page-1))}"/>
+                    <c:set var="minpostno" value="${maxpostno-(maxlists-1)}"/>
+                    
+                    <%-- 총 페이지 수 변수 totalpage --%>
+                    <c:set var="totalpage" value="${maxno/maxlists}"/>
+                    <fmt:parseNumber var="totalpage" integerOnly="true" value="${totalpage+(1-(totalpage%1))%1}"/>
 					
 					<div class="page">
+					    <c:if test="${page == 1}">
 						<div class="pagePrev"> <span class="pageDoubleLeft"><span style="font-size:11px; color:#999999;">
 							<i class="fa fa-angle-double-left"></i></span></span> <span class="pageLeft"><span style="font-size:11px; color:#999999;">
 							<i class="fa fa-angle-left"></i></span></span>
 						</div>
-						<%-- totalpage로 반복문 --%>
-						<ul>	
-							<li class="on"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page}'>1</a></li>
-							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+1}'> 2 </a></li>
-							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+2}'> 3 </a></li>
-							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+3}'> 4 </a></li>
-							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+4}'> 5 </a></li>
+						</c:if>
+						<c:if test="${page != 1}">
+						<div class="pagePrev"> <span class="pageDoubleLeft"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=1'><span style="font-size:11px;">
+							<i class="fa fa-angle-double-left"></i></span></a></span> <span class="pageLeft"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page-1}'><span style="font-size:11px;">
+							<i class="fa fa-angle-left"></i></span></a></span>
+						</div>
+						</c:if>
+						<ul>
+						    <%-- 게시물 페이지 버튼 출력 --%>
+						    <c:forEach var="i" begin="1" end="${totalpage}">
+						    <c:if test="${page == i}">
+							    <li class="on"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${i}'> ${i} </a></li>
+							</c:if>
+							<c:if test="${page != i}">
+							    <li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${i}'> ${i} </a></li>
+						    </c:if>
+						    </c:forEach>
 						</ul>
-						<div class="pageNext"> <span class="pageRight"><a href='/spb3/sboard3/list.php?db=taskplan&page=6'><span style="font-size:11px;">
-							<i class="fa fa-angle-right"></i></span></a></span> <span class="pageDoubleRight"><a href="/spb3/sboard3/list.php?db=taskplan&page=7"><span style="font-size:11px;">
+						
+						<c:if test="${page == totalpage}">
+						<div class="pageNext"> <span class="pageRight"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-right"></i></span></span> <span class="pageDoubleRight"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-double-right"></i></span></span>
+						</c:if>
+						<c:if test="${page != totalpage}">
+						<div class="pageNext"> <span class="pageRight"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+1}'><span style="font-size:11px;">
+							<i class="fa fa-angle-right"></i></span></a></span> <span class="pageDoubleRight"><a href="/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${totalpage}"><span style="font-size:11px;">
 							<i class="fa fa-angle-double-right"></i></span></a></span>
 						</div>
+						</c:if>
 					</div>
        	</div>
 </body>
