@@ -150,7 +150,8 @@
 		<sql:query var="rs" dataSource="jdbc/mydb">
 			select post.no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 			from post, (SELECT @rownum:=0) as r, posttext
-			where post.no=posttext.no
+			where post.no=posttext.no and
+			      category=? and posttext.text like(?)
 			order by rownum desc
 		<sql:param value="${catename}"/>
 		<sql:param value="%${word}%"/>
@@ -346,6 +347,7 @@
                     
 <%-- 총 페이지 수 변수 totalpage --%>
 <c:set var="totalpage" value="${maxno/maxlists}"/>
+<%-- 소수점 올림 --%>
 <fmt:parseNumber var="totalpage" integerOnly="true" value="${totalpage+(1-(totalpage%1))%1}"/>
 
 
