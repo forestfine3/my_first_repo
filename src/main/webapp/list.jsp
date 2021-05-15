@@ -405,7 +405,7 @@
 						</ul>
 					</div>
 					</c:otherwise>
-					</c:choose>
+          </c:choose>
 					<c:set var="maxlists" value="2"/>
 					<c:forEach var="row" items="${totalcnt.rows}">
 					<c:set var="maxno" value="${row.cnt}"/>
@@ -455,4 +455,9 @@
 						</c:if>
 					</div>
        	</div>
+        <div class="board-btn">
+					    <a href="create.jsp">
+               <button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button>
+              </a>
+        </div>
 </body>
