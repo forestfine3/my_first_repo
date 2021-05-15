@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" import="java.util.*" %>
+<%@ page import="java.lang.Math.*" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
@@ -116,15 +117,16 @@
 					<c:set var="option" value="${param.option}"/>
 					<c:set var="catename" value="${cateMap[category]}"/>
 					<c:set var="word" value="${param.word}"/>
+					<c:set var="page" value="${param.page}"/>
 					
 					<%-- 카테고리 버튼 순서대로 출력 --%>
 					<c:forEach var="i" items="${cateMap}">
 				    	<c:choose>
 					        <c:when test="${category == i.key}">
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
 							</c:when>
 							<c:otherwise>
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab" style="display: inline-block;">${i.value}</a>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>		
@@ -175,7 +177,48 @@
 		</sql:query>
 	</c:otherwise>
 </c:choose>
-				
+<c:choose>
+	<c:when test ="${option == 'title'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select count(*)
+			from post
+			where category=? and title like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'content'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select count(*)
+			from post, posttext
+			where post.no=posttext.no and
+   			   category=? and posttext.text like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'manager'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=? and writer=?
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="${word}"/>
+		</sql:query>
+	</c:when>
+	<c:otherwise>
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=?
+			order by rownum desc
+			<sql:param value="${catename}"/>
+		</sql:query>
+	</c:otherwise>
+</c:choose>
 				<div class="board-search">
 						<form name="search" style="margin: 0;"get";>
 							<div class="search-con">
@@ -362,10 +405,59 @@
 						</ul>
 					</div>
 					</c:otherwise>
-					</c:choose>
-					<div class="board-btn">
+          </c:choose>
+					<c:set var="maxlists" value="2"/>
+					<c:forEach var="row" items="${totalcnt.rows}">
+					<c:set var="maxno" value="${row.cnt}"/>
+					</c:forEach>
+					<c:set var="maxpostno" value="${maxno - (maxlists*(page-1))}"/>
+                    <c:set var="minpostno" value="${maxpostno-(maxlists-1)}"/>
+                    
+                    <%-- 총 페이지 수 변수 totalpage --%>
+                    <c:set var="totalpage" value="${maxno/maxlists}"/>
+                    <fmt:parseNumber var="totalpage" integerOnly="true" value="${totalpage+(1-(totalpage%1))%1}"/>
+					
+					<div class="page">
+					    <c:if test="${page == 1}">
+						<div class="pagePrev"> <span class="pageDoubleLeft"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-double-left"></i></span></span> <span class="pageLeft"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-left"></i></span></span>
+						</div>
+						</c:if>
+						<c:if test="${page != 1}">
+						<div class="pagePrev"> <span class="pageDoubleLeft"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=1'><span style="font-size:11px;">
+							<i class="fa fa-angle-double-left"></i></span></a></span> <span class="pageLeft"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page-1}'><span style="font-size:11px;">
+							<i class="fa fa-angle-left"></i></span></a></span>
+						</div>
+						</c:if>
+						<ul>
+						    <%-- 게시물 페이지 버튼 출력 --%>
+						    <c:forEach var="i" begin="1" end="${totalpage}">
+						    <c:if test="${page == i}">
+							    <li class="on"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${i}'> ${i} </a></li>
+							</c:if>
+							<c:if test="${page != i}">
+							    <li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${i}'> ${i} </a></li>
+						    </c:if>
+						    </c:forEach>
+						</ul>
+						
+						<c:if test="${page == totalpage}">
+						<div class="pageNext"> <span class="pageRight"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-right"></i></span></span> <span class="pageDoubleRight"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-double-right"></i></span></span>
+						</c:if>
+						<c:if test="${page != totalpage}">
+						<div class="pageNext"> <span class="pageRight"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+1}'><span style="font-size:11px;">
+							<i class="fa fa-angle-right"></i></span></a></span> <span class="pageDoubleRight"><a href="/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${totalpage}"><span style="font-size:11px;">
+							<i class="fa fa-angle-double-right"></i></span></a></span>
+						</div>
+						</c:if>
+					</div>
+       	</div>
+        <div class="board-btn">
 					    <a href="create.jsp">
-                            <button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button>
-                        </a>
+               <button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button>
+              </a>
         </div>
 </body>
