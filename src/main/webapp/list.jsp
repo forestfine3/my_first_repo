@@ -116,15 +116,16 @@
 					<c:set var="option" value="${param.option}"/>
 					<c:set var="catename" value="${cateMap[category]}"/>
 					<c:set var="word" value="${param.word}"/>
+					<c:set var="page" value="${param.page}"/>
 					
 					<%-- 카테고리 버튼 순서대로 출력 --%>
 					<c:forEach var="i" items="${cateMap}">
 				    	<c:choose>
 					        <c:when test="${category == i.key}">
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
 							</c:when>
 							<c:otherwise>
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab" style="display: inline-block;">${i.value}</a>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>		
@@ -175,7 +176,48 @@
 		</sql:query>
 	</c:otherwise>
 </c:choose>
-				
+<c:choose>
+	<c:when test ="${option == 'title'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select count(*)
+			from post
+			where category=? and title like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'content'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select count(*)
+			from post, posttext
+			where post.no=posttext.no and
+   			   category=? and posttext.text like(?)
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="%${word}%"/>
+		</sql:query>
+	</c:when>
+	<c:when test ="${option == 'manager'}">
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=? and writer=?
+			order by rownum desc
+		<sql:param value="${catename}"/>
+		<sql:param value="${word}"/>
+		</sql:query>
+	</c:when>
+	<c:otherwise>
+		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
+			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
+			from post, (SELECT @rownum:=0) as r
+			where category=?
+			order by rownum desc
+			<sql:param value="${catename}"/>
+		</sql:query>
+	</c:otherwise>
+</c:choose>
 				<div class="board-search">
 						<form name="search" style="margin: 0;"get";>
 							<div class="search-con">
@@ -363,5 +405,28 @@
 					</div>
 					</c:otherwise>
 					</c:choose>
-        </div>
+					<c:set var="maxlist" value="${2}"/>
+					<c:set var="maxpost" value="${ 5 - ( maxlist * (page-1) ) }"/>
+					<c:set var="minpost" value="${ maxpost - maxlist - 1 }"/>
+					<c:set var="totalpage" value="${maxpost/maxlist}"/>
+					
+					<div class="page">
+						<div class="pagePrev"> <span class="pageDoubleLeft"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-double-left"></i></span></span> <span class="pageLeft"><span style="font-size:11px; color:#999999;">
+							<i class="fa fa-angle-left"></i></span></span>
+						</div>
+						<%-- totalpage로 반복문 --%>
+						<ul>	
+							<li class="on"><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page}'>1</a></li>
+							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+1}'> 2 </a></li>
+							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+2}'> 3 </a></li>
+							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+3}'> 4 </a></li>
+							<li><a href='/WebProject1/list.jsp?categoryname=${param.categoryname}&page=${page+4}'> 5 </a></li>
+						</ul>
+						<div class="pageNext"> <span class="pageRight"><a href='/spb3/sboard3/list.php?db=taskplan&page=6'><span style="font-size:11px;">
+							<i class="fa fa-angle-right"></i></span></a></span> <span class="pageDoubleRight"><a href="/spb3/sboard3/list.php?db=taskplan&page=7"><span style="font-size:11px;">
+							<i class="fa fa-angle-double-right"></i></span></a></span>
+						</div>
+					</div>
+       	</div>
 </body>
