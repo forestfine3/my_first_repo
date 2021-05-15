@@ -141,7 +141,7 @@
 			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 			from post, (SELECT @rownum:=0) as r
 			where category=? and title like(?)
-			order by rownum desc
+			order by rownum desc;
 		<sql:param value="${catename}"/>
 		<sql:param value="%${word}%"/>
 		</sql:query>
@@ -152,7 +152,7 @@
 			from post, (SELECT @rownum:=0) as r, posttext
 			where post.no=posttext.no and
 			      category=? and posttext.text like(?)
-			order by rownum desc
+			order by rownum desc;
 		<sql:param value="${catename}"/>
 		<sql:param value="%${word}%"/>
 		</sql:query>
@@ -162,7 +162,7 @@
 			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 			from post, (SELECT @rownum:=0) as r
 			where category=? and writer=?
-			order by rownum desc
+			order by rownum desc;
 		<sql:param value="${catename}"/>
 		<sql:param value="${word}"/>
 		</sql:query>
@@ -172,54 +172,12 @@
 			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 			from post, (SELECT @rownum:=0) as r
 			where category=?
-			order by rownum desc
+			order by rownum desc;
 			<sql:param value="${catename}"/>
 		</sql:query>
 	</c:otherwise>
 </c:choose>
 
-<c:choose>
-	<c:when test ="${option == 'title'}">
-		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
-			select count(*)
-			from post
-			where category=? and title like(?)
-			order by rownum desc
-		<sql:param value="${catename}"/>
-		<sql:param value="%${word}%"/>
-		</sql:query>
-	</c:when>
-	<c:when test ="${option == 'content'}">
-		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
-			select count(*)
-			from post, posttext
-			where post.no=posttext.no and
-   			   category=? and posttext.text like(?)
-			order by rownum desc
-		<sql:param value="${catename}"/>
-		<sql:param value="%${word}%"/>
-		</sql:query>
-	</c:when>
-	<c:when test ="${option == 'manager'}">
-		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
-			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
-			from post, (SELECT @rownum:=0) as r
-			where category=? and writer=?
-			order by rownum desc
-		<sql:param value="${catename}"/>
-		<sql:param value="${word}"/>
-		</sql:query>
-	</c:when>
-	<c:otherwise>
-		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
-			select no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
-			from post, (SELECT @rownum:=0) as r
-			where category=?
-			order by rownum desc
-			<sql:param value="${catename}"/>
-		</sql:query>
-	</c:otherwise>
-</c:choose>
 				<div class="board-search">
 						<form name="search" style="margin: 0;"get";>
 							<div class="search-con">
@@ -230,6 +188,7 @@
 								</select>
 							</div>
 							<input type="hidden" name="categoryname" value="${category}">
+							<input type="hidden" name="page" value="${page}">
 							<div class="search-input">
 								<input type="text" name="word" placeholder="검색 내용을 입력해주세요"
 									pattern="{2,}" required
