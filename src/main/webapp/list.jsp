@@ -150,8 +150,7 @@
 		<sql:query var="rs" dataSource="jdbc/mydb">
 			select post.no, title, writer, register_date, hits, category, attach, @rownum := @rownum + 1 as rownum
 			from post, (SELECT @rownum:=0) as r, posttext
-			where post.no=posttext.no and
-   			   category=? and posttext.text like(?)
+			where post.no=posttext.no
 			order by rownum desc
 		<sql:param value="${catename}"/>
 		<sql:param value="%${word}%"/>
@@ -177,6 +176,7 @@
 		</sql:query>
 	</c:otherwise>
 </c:choose>
+
 <c:choose>
 	<c:when test ="${option == 'title'}">
 		<sql:query var="rs_cnt" dataSource="jdbc/mydb">
@@ -334,6 +334,21 @@
 							</strong>건</span>
 						</div>
 					</div>
+
+<%-- 한 페이지 내 게시물 수 maxlists--%>
+<c:set var="maxlists" value="5"/>
+
+<c:forEach var="row" items="${totalcnt.rows}">
+<c:set var="maxno" value="${row.cnt}"/>
+</c:forEach>
+<c:set var="maxpostno" value="${maxno - (maxlists*(page-1))}"/>
+<c:set var="minpostno" value="${maxpostno-(maxlists-1)}"/>
+                    
+<%-- 총 페이지 수 변수 totalpage --%>
+<c:set var="totalpage" value="${maxno/maxlists}"/>
+<fmt:parseNumber var="totalpage" integerOnly="true" value="${totalpage+(1-(totalpage%1))%1}"/>
+
+
 					<c:choose>
 					<c:when test="${category == 'performance'}">
 					<div class="board-glist">
@@ -380,6 +395,7 @@
 							</li>
 							
 							<c:forEach var="row" items="${rs.rows}">
+							    <c:if test="${minpostno <= row.rownum and row.rownum <= maxpostno}">
 								<c:if test="${row.category == catename}">
 									<li class="table-body-row">
 										<div class="td td-cell01">${row.rownum}</div>
@@ -401,22 +417,15 @@
 										</div>
 									</li>
 								</c:if>
+								</c:if>
 							</c:forEach>
 						</ul>
 					</div>
 					</c:otherwise>
           </c:choose>
-					<c:set var="maxlists" value="2"/>
-					<c:forEach var="row" items="${totalcnt.rows}">
-					<c:set var="maxno" value="${row.cnt}"/>
-					</c:forEach>
-					<c:set var="maxpostno" value="${maxno - (maxlists*(page-1))}"/>
-                    <c:set var="minpostno" value="${maxpostno-(maxlists-1)}"/>
-                    
-                    <%-- 총 페이지 수 변수 totalpage --%>
-                    <c:set var="totalpage" value="${maxno/maxlists}"/>
-                    <fmt:parseNumber var="totalpage" integerOnly="true" value="${totalpage+(1-(totalpage%1))%1}"/>
-					
+					<div class="board-btn">
+        				<a href="create.jsp"><button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button></a>
+        			</div>
 					<div class="page">
 					    <c:if test="${page == 1}">
 						<div class="pagePrev"> <span class="pageDoubleLeft"><span style="font-size:11px; color:#999999;">
@@ -454,11 +463,8 @@
 						</div>
 						</c:if>
 					</div>
-					<div class="board-btn">
-					    <a href="create.jsp">
-               <button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button>
-              </a>
-        </div>
+					
        	</div>
         
 </body>
+</html>
