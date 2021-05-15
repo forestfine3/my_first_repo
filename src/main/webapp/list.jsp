@@ -454,10 +454,11 @@
 						</div>
 						</c:if>
 					</div>
-       	</div>
-        <div class="board-btn">
+					<div class="board-btn">
 					    <a href="create.jsp">
                <button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button>
               </a>
         </div>
+       	</div>
+        
 </body>
