@@ -1,4 +1,9 @@
 <%@ page contentType="text/html;charset=utf-8" %>
+
+<%
+String uid = (String)session.getAttribute("uid");
+%>
+
 <!DOCTYPE html>
 <html lang="ko"><head>
         <meta charset="utf-8">
@@ -25,6 +30,8 @@
         <script src="/js/script.js"></script>
     </head>
     <body class="">
+    	<br>
+        <p style="text-align:right;"><%=uid%>님 환영합니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>
         <div id="wrap" class="main">
             <header id="header" class="header">
 			<!-- 새로추가 -->

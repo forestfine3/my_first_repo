@@ -20,6 +20,10 @@ select uname from login where uid=? and upasswd=?
 사용자 이름 혹은 암호가 일치하지 않습니다.
 </c:when>
 <c:otherwise>
+<%
+String uid = request.getParameter("uid");
+session.setAttribute("uid", uid);
+%>
 '${uname}'님 환영합니다.
 </c:otherwise>
 </c:choose>

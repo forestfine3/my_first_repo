@@ -4,6 +4,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%
+String uid = (String)session.getAttribute("uid");
+%>
+
 <!DOCTYPE html>
 <html>
 
@@ -48,6 +52,8 @@ where no=?
 
 
 <head>
+		<br>
+        <p style="text-align:right;"><%=uid%>님 환영합니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>
 
 <title>목포대학교 링크플러스사업단</title>
 <link rel="stylesheet" type="text/css"

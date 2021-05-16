@@ -5,6 +5,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%
+String uid = (String)session.getAttribute("uid");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +28,8 @@
 </head>
 
 <body class="">
+		<br>
+        <p style="text-align:right;"><%=uid%>님 환영합니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>
         <div id="wrap" class="main">
             <header id="header" class="header">
             <script>
