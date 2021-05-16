@@ -22,22 +22,24 @@ where no = ? and writer = ?
 <c:set var="select_no" value="${row.no}"/>
 </c:forEach>
 
-<html>
-<head><title>db삭제 테스트</title></head>
-<h2>db삭제 테스트</h2>
-<body>
-<c:if test="${select_no == null}">
-삭제가 진행되지 않았습니다
-</c:if>
 <c:if test="${select_no != null}">
-${select_no}번 글을 삭제합니다
-
 <sql:update var="rs" dataSource="jdbc/mydb">
 delete from post
 where no = ?
 <sql:param value="${ select_no }" />
 </sql:update>
 
+<%-- 정상적으로 삭제됐다면 공지사항 페이지로 리다이렉트 --%>
+<% 
+response.sendRedirect("list.jsp?categoryname=notice");
+%>
+
+</c:if>
+
+<html>
+<body>
+<c:if test="${select_no == null}">
+삭제가 진행되지 않았습니다
 </c:if>
 </body>
 
