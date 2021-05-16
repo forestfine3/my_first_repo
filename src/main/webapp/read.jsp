@@ -252,7 +252,7 @@ order by rownum desc;
 					</c:if>
 				</div>
 			</div>
-			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
+			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}&page=${param.page}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
 		</div>
 	</div>
 </div>

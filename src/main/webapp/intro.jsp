@@ -302,11 +302,11 @@
 				<h3>캡스톤디자인</h3>
 				<div class="sub7_tab_menu" style="text-align: center;">
 					<a href="/WebProject1/intro.jsp" class="sub7_tab check" style="display: inline-block;">소개</a>
-					<a href="/WebProject1/list.jsp?categoryname=notice&page=1" class="sub7_tab" style="display: inline-block;">공지사항</a>
-					<a href="/WebProject1/list.jsp?categoryname=docu&page=1" class="sub7_tab" style="display: inline-block;">서식</a>
-					<a href="/WebProject1/list.jsp?categoryname=performance&page=1" class="sub7_tab" style="display: inline-block;">성과</a>
-					<a href="/WebProject1/list.jsp?categoryname=task&page=1" class="sub7_tab" style="display: inline-block;">과제 계획서</a>
-					<a href="/WebProject1/list.jsp?categoryname=demand&page=1" class="sub7_tab" style="display: inline-block;">기업/기관 수요</a>
+					<a href="/WebProject1/list.jsp?categoryname=notice" class="sub7_tab" style="display: inline-block;">공지사항</a>
+					<a href="/WebProject1/list.jsp?categoryname=docu" class="sub7_tab" style="display: inline-block;">서식</a>
+					<a href="/WebProject1/list.jsp?categoryname=performance" class="sub7_tab" style="display: inline-block;">성과</a>
+					<a href="/WebProject1/list.jsp?categoryname=task" class="sub7_tab" style="display: inline-block;">과제 계획서</a>
+					<a href="/WebProject1/list.jsp?categoryname=demand" class="sub7_tab" style="display: inline-block;">기업/기관 수요</a>
 				</div>
 				<div class="sub_onlinejoin_button">
 					<a>캡스톤디자인 신청</a> <a style="width: 170px">캡스톤디자인 신청현황</a>
