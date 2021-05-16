@@ -1,27 +1,24 @@
 <%@ page contentType="text/html;charset=utf-8" import="java.util.*" %>
 
-<%-- fmt태그 사용 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%-- DB 연동--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<sql:query var="rs" dataSource="jdbc/mydb">
-select no, title, writer, register_date, hits, category, attach from test.post
-order by no desc
-</sql:query>
-
 <!DOCTYPE html>
 <html>
+
 <c:set var="postno" value="${param.postno}"/>
 <c:set var="categoryname" value="${param.categoryname}"/>
-<!-- 게시물 DB -->
+
+<%-- 현재 게시물 정보 DB에서 불러오기 --%>
 <sql:query var="list" dataSource="jdbc/mydb">
 select no, title, writer, register_date, hits, attach
 from test.post
 where no=?
 <sql:param value="${postno}"/>
 </sql:query>
+
+<%-- 불러온 테이블에서 각 데이터를 변수에 저장 --%>
 <c:forEach var="row" items="${list.rows}">
 <c:set var="title" value="${row.title}"/>
 <c:set var="writer" value="${row.writer}"/>
@@ -30,15 +27,21 @@ where no=?
 <c:set var="attach" value="${row.attach}"/>
 </c:forEach>
 
+<%-- 게시물 내용 DB에서 게시물 내용 불러오기 --%>
 <sql:query var="post" dataSource="jdbc/mydb">
 select no, text
 from test.posttext
 where no=?
 <sql:param value="${postno}"/>
 </sql:query>
+
+<%-- 불러온 게시물 내용을 변수에 저장 --%>
 <c:forEach var="row" items="${post.rows}">
 <c:set var="text" value="${row.text}"/>
 </c:forEach>
+
+
+
 
 <head>
 
@@ -167,6 +170,7 @@ where no=?
 					%>
 					<c:set var="cateMap" value="<%=map %>"/>
 					<c:set var="category" value="${param.categoryname}"/>
+					<c:set var="catename" value="${cateMap[category]}"/>
 					
 					<!-- 카테고리 버튼 순서대로 출력 -->
 					<c:forEach var="i" items="${cateMap}">
@@ -181,14 +185,46 @@ where no=?
 					</c:forEach>		
 				</div>
 				
+<%-- 현재 카테고리의 모든 게시물 번호, 제목 테이블 불러오기 --%>
+<sql:query var="rs" dataSource="jdbc/mydb">
+select no, title, @rownum := @rownum + 1 as rownum
+from test.post, (SELECT @rownum:=0) as r
+where category=?
+order by rownum desc;
+<sql:param value="${catename}"/>
+</sql:query>
+
+<%-- 현재 게시물의 위치 계산 --%>
+<c:forEach var="row" items="${rs.rows}">
+<c:if test="${postno == row.no}">
+<c:set var="current_rownum" value="${row.rownum}"/>
+</c:if>
+</c:forEach>
+
+<%-- 이전 게시물, 다음 게시물의 글번호, 제목 저장 --%>
+<c:forEach var="row" items="${rs.rows}">
+<c:if test="${row.rownum == current_rownum+1}">
+<c:set var="pre_postno" value="${row.no}"/>
+<c:set var="pre_title" value="${row.title}"/>
+</c:if>
+</c:forEach>
+<c:forEach var="row" items="${rs.rows}">
+<c:if test="${row.rownum == current_rownum-1}">
+<c:set var="next_postno" value="${row.no}"/>
+<c:set var="next_title" value="${row.title}"/>
+</c:if>
+</c:forEach>			
         
         
 <div class="board-view">
 		<div class="viewBoard">
-			<div class="viewSubject"> ${title} </div>
+			<div class="viewSubject">${title} </div>
 			<div class="viewInfo"> <span>작성자: ${writer}</span> <span>작성일: ${wdate}</span> <span>조회수: ${hits}</span></div>
 			<div class="viewContent"> 
 				<div class="viewContent-body cke_editable ">
+				    <c:if test="${pre_postno == null}">
+				    is null
+				    </c:if>
 					${text}			
 					<br>
 					<br>
@@ -197,14 +233,26 @@ where no=?
 				<hr class="hr1"> - 첨부파일: ${attach}<br><hr class="hr2">
 				
 				<div class="viewList">
-					<div class="viewPrev"><span><i class="fa fa-angle-up" aria-hidden="true"></i> <a href="">이전글</a></span><a href=""></a>
-						
+				    <c:if test="${pre_postno == null}">
+				    <div class="viewPrev"><span><i class="fa fa-angle-up" aria-hidden="true"></i> 이전글</span>
 						이전 게시물이 없습니다.
 					</div>
-					<div class="viewNext"><span><i class="fa fa-angle-down" aria-hidden="true"></i> <a href="">다음글</a></span>
-						
+				    </c:if>
+				    <c:if test="${pre_postno != null}">
+					<div class="viewPrev"><span><i class="fa fa-angle-up" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}">이전글</a></span>
+					    <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}">${pre_title}</a>
+					</div>
+					</c:if>
+					<c:if test="${next_postno == null}">
+					<div class="viewNext"><span><i class="fa fa-angle-down" aria-hidden="true"></i> 다음글</span>
 						다음 게시물이 없습니다.
 					</div>
+					</c:if>
+					<c:if test="${next_postno != null}">
+					<div class="viewNext"><span><i class="fa fa-angle-down" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}">다음글</a></span>
+						<a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}">${next_title}</a>	
+					</div>
+					</c:if>
 				</div>
 			</div>
 			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
