@@ -10,6 +10,19 @@ String uid = (String)session.getAttribute("uid");
 
 <c:set var="uid" value="<%=uid%>"/>
 
+<sql:query var="login" dataSource="jdbc/mydb">
+select uname
+from login
+where uid = ?
+<sql:param value="${uid}"/>
+</sql:query>
+
+<c:forEach var="row" items="${login.rows}">
+<c:set var="uname" value="${row.uname}"/>
+</c:forEach>
+
+
+
 <!DOCTYPE html>
 <html>
 
