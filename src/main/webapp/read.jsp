@@ -9,6 +9,10 @@
 
 <c:set var="postno" value="${param.postno}"/>
 <c:set var="categoryname" value="${param.categoryname}"/>
+<c:set var="page" value="${param.page}"/>
+<c:if test="${page == null }">
+  <c:set var="page" value="1"/>
+</c:if>
 
 <%-- 현재 게시물 정보 DB에서 불러오기 --%>
 <sql:query var="list" dataSource="jdbc/mydb">
@@ -236,8 +240,8 @@ order by rownum desc;
 					</div>
 				    </c:if>
 				    <c:if test="${pre_postno != null}">
-					<div class="viewPrev"><span><i class="fa fa-angle-up" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}">이전글</a></span>
-					    <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}">${pre_title}</a>
+					<div class="viewPrev"><span><i class="fa fa-angle-up" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}&page=${page}">이전글</a></span>
+					    <a href="/WebProject1/read.jsp?postno=${pre_postno}&categoryname=${categoryname}&page=${page}">${pre_title}</a>
 					</div>
 					</c:if>
 					<c:if test="${next_postno == null}">
@@ -246,13 +250,13 @@ order by rownum desc;
 					</div>
 					</c:if>
 					<c:if test="${next_postno != null}">
-					<div class="viewNext"><span><i class="fa fa-angle-down" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}">다음글</a></span>
-						<a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}">${next_title}</a>	
+					<div class="viewNext"><span><i class="fa fa-angle-down" aria-hidden="true"></i> <a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}&page=${page}">다음글</a></span>
+						<a href="/WebProject1/read.jsp?postno=${next_postno}&categoryname=${categoryname}&page=${page}">${next_title}</a>	
 					</div>
 					</c:if>
 				</div>
 			</div>
-			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}&page=${param.page}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
+			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}&page=${page}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
 		</div>
 	</div>
 </div>
