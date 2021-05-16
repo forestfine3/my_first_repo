@@ -8,6 +8,8 @@
 String uid = (String)session.getAttribute("uid");
 %>
 
+<c:set var="uid" value="<%=uid%>"/>
+
 <!DOCTYPE html>
 <html>
 
@@ -52,9 +54,6 @@ where no=?
 
 
 <head>
-		<br>
-        <p style="text-align:right;"><%=uid%>님 환영합니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>
-
 <title>목포대학교 링크플러스사업단</title>
 <link rel="stylesheet" type="text/css"
 	href="https://fonts.googleapis.com/earlyaccess/notosanskr.css"
@@ -88,44 +87,27 @@ where no=?
 <body class="">
         <div id="wrap" class="main">
             <header id="header" class="header">
-            
-            <script>
-                    var news = new Swiper('.news .swiper-container', {
-                        direction : 'vertical',
-                        loop: false,
-                        navigation: {
-                            nextEl: '.news .swiper-button-next',
-                            prevEl: '.news .swiper-button-prev',
-                        },
-                        /*autoplay: {
-                            delay: 3000,
-                        },*/
-                    });
-                    var startStopBtn = document.querySelector(".news .swiper-auto");
-                    startStopBtn.addEventListener("click", function(){
-                        if(news.autoplay.running){
-                            news.autoplay.stop();
-                            this.classList.remove("on");
-                        } else{
-                            news.autoplay.start();
-                            this.classList.add("on");
-                        }
-                        
-                    })
-                    //
-                </script>
+            <div class="header-top">
+                    <div class="wrapper">
+                        <div class="user">
+                            <ul class="clfix">
+                                <c:if test="${ uid == null }">
+									<li><a href="/WebProject1/login.jsp"><i class="i-login"></i>로그인</a></li>
+								</c:if>
+								<c:if test="${ uid != null }">
+									<li><a href="/WebProject1/logout.jsp"><i class="i-login"></i>로그아웃</a></li>
+                                	<li><a href="">회원정보</a></li>
+								</c:if>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
             </header> <div id="container" class="container" style="margin-top: 0px;">
-            <!-- 
-            <div class="sub-title">
-			<h2>교육프로그램</h2>
-		    </div>
-		     -->
 		<div class="page-nav">
 			<ul>
 				<li><i class="fa fa-home" aria-hidden="true"></i></li>
 				<li>교육프로그램</li>
 				<li>캡스톤디자인</li>
-<li><a href="login.jsp"><i class="i-login"></i>로그인</a></li>
 			</ul>
 		</div>
 		<div style="clear:both"></div>
