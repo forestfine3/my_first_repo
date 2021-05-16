@@ -381,7 +381,7 @@ String uid = (String)session.getAttribute("uid");
           </c:choose>
           			<c:if test="${ uid != null }">
 					<div class="board-btn">
-        				<a href="create.jsp"><button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button></a>
+        				<a href="create.jsp?categoryname=${param.categoryname}&page=${page}"><button id="write"><i class="fa fa-pencil" aria-hidden="true"></i>글쓰기</button></a>
         			</div>
         			</c:if>
 					<div class="page">
