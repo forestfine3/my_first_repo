@@ -118,15 +118,18 @@
 					<c:set var="catename" value="${cateMap[category]}"/>
 					<c:set var="word" value="${param.word}"/>
 					<c:set var="page" value="${param.page}"/>
+					<c:if test="${page == null }">
+					    <c:set var="page" value="1"/>
+					</c:if>
 					
 					<%-- 카테고리 버튼 순서대로 출력 --%>
 					<c:forEach var="i" items="${cateMap}">
 				    	<c:choose>
 					        <c:when test="${category == i.key}">
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
 							</c:when>
 							<c:otherwise>
-								<a href="/WebProject1/list.jsp?categoryname=${i.key}&page=1" class="sub7_tab" style="display: inline-block;">${i.value}</a>
+								<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>		
@@ -364,7 +367,7 @@
 										<div class="td td-cell01">${row.category}</div>
 										</c:if>
 										<div class="td td-cell02" style="text-align: left">
-										<a href="/WebProject1/read.jsp?postno=${row.no}&categoryname=${category}">${row.title}</a></div>
+										<a href="/WebProject1/read.jsp?postno=${row.no}&categoryname=${category}&page=${page}">${row.title}</a></div>
 										<div class="td td-cell03">${row.writer}</div>
 										<div class="td td-cell04">${row.register_date}</div>
 										<c:if test="${category == 'docu' or category == 'notice'}">
