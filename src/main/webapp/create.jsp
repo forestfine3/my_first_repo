@@ -6,6 +6,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%
+String uid = (String)session.getAttribute("uid");
+%>
+
+<c:set var="uid" value="<%=uid%>"/>
+
+<sql:query var="login" dataSource="jdbc/mydb">
+select uname
+from login
+where uid = ?
+<sql:param value="${uid}"/>
+</sql:query>
+
+<c:forEach var="row" items="${login.rows}">
+<c:set var="uname" value="${row.uname}"/>
+</c:forEach>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,45 +42,28 @@
 
 <body class="">
         <div id="wrap" class="main">
-            <header id="header" class="header">
-            
-            <script>
-                    var news = new Swiper('.news .swiper-container', {
-                        direction : 'vertical',
-                        loop: false,
-                        navigation: {
-                            nextEl: '.news .swiper-button-next',
-                            prevEl: '.news .swiper-button-prev',
-                        },
-                        /*autoplay: {
-                            delay: 3000,
-                        },*/
-                    });
-                    var startStopBtn = document.querySelector(".news .swiper-auto");
-                    startStopBtn.addEventListener("click", function(){
-                        if(news.autoplay.running){
-                            news.autoplay.stop();
-                            this.classList.remove("on");
-                        } else{
-                            news.autoplay.start();
-                            this.classList.add("on");
-                        }
-                        
-                    })
-                    //
-                </script>
+             <header id="header" class="header">
+            <div class="header-top">
+                    <div class="wrapper">
+                        <div class="user">
+                            <ul class="clfix">
+                                <c:if test="${ uid == null }">
+									<li><a href="/WebProject1/login.jsp"><i class="i-login"></i>로그인</a></li>
+								</c:if>
+								<c:if test="${ uid != null }">
+									<li><a href="/WebProject1/logout.jsp"><i class="i-login"></i>로그아웃</a></li>
+                                	<li><a href="">회원정보</a></li>
+								</c:if>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
             </header> <div id="container" class="container" style="margin-top: 0px;">
-            <!-- 
-            <div class="sub-title">
-			<h2>교육프로그램</h2>
-		    </div>
-		     -->
 		<div class="page-nav">
 			<ul>
 				<li><i class="fa fa-home" aria-hidden="true"></i></li>
 				<li>교육프로그램</li>
 				<li>캡스톤디자인</li>
-<li><a href="login.jsp"><i class="i-login"></i>로그인</a></li>
 			</ul>
 		</div>
 		<div style="clear:both"></div>
@@ -72,13 +72,13 @@
 				<h3><i class="fa fa-tags" aria-hidden="true"></i><br>
 					교육프로그램</h3>
 				<ul>
-					<li><a href="/spb3/gourl.php?k=sub2_1_intro">비교과교육</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_2_intro">창의융합전공</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_3_intro">캡스톤디자인</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_4_intro">프로젝트LAB</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_5_intro">현장실습</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_6_intro">창업교육</a></li>
-					<li><a href="/spb3/gourl.php?k=sub2_7_intro">어드벤처디자인</a></li>
+					<li><a href=""">비교과교육</a></li>
+					<li><a href=""">창의융합전공</a></li>
+					<li><a href="">캡스톤디자인</a></li>
+					<li><a href="">프로젝트LAB</a></li>
+					<li><a href="">현장실습</a></li>
+					<li><a href="">창업교육</a></li>
+					<li><a href="">어드벤처디자인</a></li>
 				</ul>
 			</div>
 			<style>
@@ -101,11 +101,9 @@
 }
 </style>
 		<div class="sub-right">
-					<h3>캡스톤디자인</h3>
+					<h3>글쓰기</h3>
 					<div class="sub7_tab_menu" style="text-align: center;">
-					
-					<a href="/WebProject1/intro.jsp" class="sub7_tab" style="display: inline-block;">소개</a>
-					
+				
 					
 					<%
 					// 카테고리를 순서대로 출력하기 위해 LinkedHashMap 타입으로 데이터 저장
@@ -119,57 +117,61 @@
 					<c:set var="cateMap" value="<%=map %>"/>
 					<c:set var="category" value="${param.categoryname}"/>
 					
-					<!-- 카테고리 버튼 순서대로 출력 -->
-					<c:forEach var="i" items="${cateMap}">
-					<c:choose>
-					<c:when test="${category == i.key}">
-					<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab check" style="display: inline-block;">${i.value}</a>
-					</c:when>
-					<c:otherwise>
-					<a href="/WebProject1/list.jsp?categoryname=${i.key}" class="sub7_tab" style="display: inline-block;">${i.value}</a>
-					</c:otherwise>
-					</c:choose>
-					</c:forEach>		
+					
 				</div>
 
 <div class="write-board">
 <form name="boardwrite" style="margin:0;" method="post" action="crt.jsp" >
+<br>
+&nbsp;&nbsp;&nbsp;카테고리:&nbsp;
+<select name="option">
+	<option value="공지사항">  공지사항  </option>
+	<option value="서식">  서식  </option>
+	<option value="성과">  성과  </option>
+	<option value="과제 계획서">  과제 계획서  </option>
+	<option value="기업/기관 수요">  기업/기관 수요  </option>
+</select>
+<div class="wrName" style="width:100%; float:laft;">	
+<input type='text' name='title' placeholder="제목을 입력하세요">
+</div>
 
-<div class="wrName">
-<input type='text' name='no' 
-placeholder="번호">
-</div>	
-<div class="wrName">	
-<input type='text' name='title' placeholder="제목">
-</div>
-<div class="wrName">
-<input type='text' name='writer' placeholder="작성자">
-</div>
-<div class="wrSubject">
-<input type='date' name='register_date' placeholder="등록일">
-</div>
-<div class="wrName">
-<input type='text' name='hits' placeholder="조회수">
-</div>
-<div class="wrName">
-<input type='text' name='attach' placeholder="첨부파일">		
-</div>
-<div class="wrName">
-<input type='text' name='category' placeholder="카테고리">
-</div>
 <div class="wrContent">
 <input type='textarea' name="content" style=" width:700px; height:200px; " >	
 </div>
 
+<div class="wrName">
+<input type='text' name='attach' placeholder="첨부파일">		
 </div>
 
+</div>
+
+<%-- 작성될 글 번호 전송 --%>
+<sql:query var="rs" dataSource="jdbc/mydb">
+select max(no) as maxno
+from post
+</sql:query>
+<c:forEach var="row" items="${rs.rows}">
+<c:set var="max_no" value="${row.maxno}"/>
+</c:forEach> 
+<input type='hidden' name='max_no' value="${max_no+1}">
+
+<%-- 현재 날짜 전송 --%>
+<c:set var="today" value="<%=new java.util.Date() %>" />
+<fmt:formatDate var="now" type="date" value="${today}" pattern="yyyy-MM-dd" />
+<input type='hidden' name='register_date' value="${now}">
+
+<input type='hidden' name='hits' value="0">
+<input type='hidden' name='categoryname' value="${param.categoryname}">
+<input type='hidden' name='page' value="${param.page}">
+<input type='hidden' name='writer' value="${uname}">
+
 <div class="boardWriteBtn"> 
-<a href="crt.jsp">
+<a href="crt.jsp?categoryname=${param.categoryname}">
 <button id="write" type="submit" >
 <i class="fa fa-pencil" aria-hidden="true">
 </i> 글쓰기</button>
 </a>
-<a href="list.jsp">
+<a href="list.jsp?categoryname=${param.categoryname}&page=${param.page}">
 <button id="cancel" type="button" >
 <i class="fa fa-list" aria-hidden="true">
 </i>목록으로</button>
