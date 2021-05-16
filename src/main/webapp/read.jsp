@@ -222,9 +222,6 @@ order by rownum desc;
 			<div class="viewInfo"> <span>작성자: ${writer}</span> <span>작성일: ${wdate}</span> <span>조회수: ${hits}</span></div>
 			<div class="viewContent"> 
 				<div class="viewContent-body cke_editable ">
-				    <c:if test="${pre_postno == null}">
-				    is null
-				    </c:if>
 					${text}			
 					<br>
 					<br>
