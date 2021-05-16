@@ -83,6 +83,7 @@ CREATE TABLE `posttext` (
   `text` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`textno`),
   KEY `no` (`no`),
+  CONSTRAINT `FK_B_1` FOREIGN KEY (`no`) REFERENCES `post` (`no`) ON DELETE CASCADE,
   CONSTRAINT `posttext_ibfk_1` FOREIGN KEY (`no`) REFERENCES `post` (`no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -132,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-16 14:20:17
+-- Dump completed on 2021-05-16 16:44:53

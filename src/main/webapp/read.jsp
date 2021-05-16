@@ -4,6 +4,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%
+String uid = (String)session.getAttribute("uid");
+%>
+
+<c:set var="uid" value="<%=uid%>"/>
+
+<sql:query var="login" dataSource="jdbc/mydb">
+select uname
+from login
+where uid = ?
+<sql:param value="${uid}"/>
+</sql:query>
+
+<c:forEach var="row" items="${login.rows}">
+<c:set var="uname" value="${row.uname}"/>
+</c:forEach>
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -48,7 +67,6 @@ where no=?
 
 
 <head>
-
 <title>목포대학교 링크플러스사업단</title>
 <link rel="stylesheet" type="text/css"
 	href="https://fonts.googleapis.com/earlyaccess/notosanskr.css"
@@ -82,44 +100,27 @@ where no=?
 <body class="">
         <div id="wrap" class="main">
             <header id="header" class="header">
-            
-            <script>
-                    var news = new Swiper('.news .swiper-container', {
-                        direction : 'vertical',
-                        loop: false,
-                        navigation: {
-                            nextEl: '.news .swiper-button-next',
-                            prevEl: '.news .swiper-button-prev',
-                        },
-                        /*autoplay: {
-                            delay: 3000,
-                        },*/
-                    });
-                    var startStopBtn = document.querySelector(".news .swiper-auto");
-                    startStopBtn.addEventListener("click", function(){
-                        if(news.autoplay.running){
-                            news.autoplay.stop();
-                            this.classList.remove("on");
-                        } else{
-                            news.autoplay.start();
-                            this.classList.add("on");
-                        }
-                        
-                    })
-                    //
-                </script>
+            <div class="header-top">
+                    <div class="wrapper">
+                        <div class="user">
+                            <ul class="clfix">
+                                <c:if test="${ uid == null }">
+									<li><a href="/WebProject1/login.jsp"><i class="i-login"></i>로그인</a></li>
+								</c:if>
+								<c:if test="${ uid != null }">
+									<li><a href="/WebProject1/logout.jsp"><i class="i-login"></i>로그아웃</a></li>
+                                	<li><a href="">회원정보</a></li>
+								</c:if>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
             </header> <div id="container" class="container" style="margin-top: 0px;">
-            <!-- 
-            <div class="sub-title">
-			<h2>교육프로그램</h2>
-		    </div>
-		     -->
 		<div class="page-nav">
 			<ul>
 				<li><i class="fa fa-home" aria-hidden="true"></i></li>
 				<li>교육프로그램</li>
 				<li>캡스톤디자인</li>
-<li><a href="login.jsp"><i class="i-login"></i>로그인</a></li>
 			</ul>
 		</div>
 		<div style="clear:both"></div>
@@ -256,7 +257,15 @@ order by rownum desc;
 					</c:if>
 				</div>
 			</div>
-			<div class="viewWrite"> <span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}&page=${page}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span> <span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a> <!--<a href="/spb3/sboard3/write.php?db=demand&uid=32&mode=write"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>--> <a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a> <a href="/spb3/sboard3/ok.php?db=demand&amp;uid=32&amp;mode=delete" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span> </div></div>
+			<div class="viewWrite">
+			<span class="viewListBtn"> <a href="/WebProject1/list.jsp?&categoryname=${categoryname}&page=${page}"><i class="fa fa-list" aria-hidden="true"></i> 목록</a> </span>
+			<span class="viewBtn"> <a href="/spb3/sboard3/reply.php?db=demand&amp;uid=32&amp;mode=reply"><i class="fa fa-pencil" aria-hidden="true"></i> 답변</a>
+			<a href="/spb3/sboard3/modify.php?db=demand&amp;uid=32&amp;mode=modify&amp;num=14"><i class="fa fa-cog" aria-hidden="true"></i> 수정하기</a>
+			<c:if test="${uname == writer}">
+			<a href="/WebProject1/delete.jsp?writer=${uname}&no=${postno}" onclick="javascript: return confirm('정말 삭제하시겠습니까?');"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제하기</a>  </span>
+			</c:if>
+			</div>
+			</div>
 		</div>
 	</div>
 </div>
