@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.24, for Win64 (x86_64)
 --
 -- Host: localhost    Database: test
 -- ------------------------------------------------------
--- Server version	8.0.23
+-- Server version	8.0.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `post`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `post` (
   `no` int NOT NULL,
-  `title` varchar(20) NOT NULL,
+  `title` varchar(40) NOT NULL,
   `writer` varchar(20) NOT NULL,
   `register_date` date NOT NULL,
   `hits` int NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE `post` (
   `category` varchar(10) NOT NULL,
   PRIMARY KEY (`no`),
   UNIQUE KEY `postid_UNIQUE` (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='게시물 DB';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='게시물 DB';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요'),(10,'오늘날짜 테스트 공지사항','test','2021-05-11',3,NULL,'공지사항'),(11,'오늘날짜 테스트 서식','test','2021-05-11',6,NULL,'서식'),(12,'오늘날짜 테스트2 서식','test','2021-05-11',2,NULL,'서식'),(13,'totay cnt test','김무성','2021-05-11',0,'a.txt','공지사항');
+INSERT INTO `post` VALUES (1,'첫번째 게시물입니다.','김무성','2021-04-10',1,'test1.txt','서식'),(2,'두번째 게시물입니다.','김무성','2021-04-11',0,NULL,'서식'),(3,'공지사항1','관리자','2021-04-13',3,'test2.txt','공지사항'),(4,'공지사항2','관리자','2021-04-13',2,NULL,'공지사항'),(5,'aaaaaaaaaaaaaaaaaa','test','2021-04-15',1,'test3.txt','공지사항'),(6,'과제1','관리자','2021-04-15',5,NULL,'과제 계획서'),(7,'과제2','관리자','2021-04-18',3,'test.png','과제 계획서'),(8,'신청내용1','관리자','2021-04-18',0,NULL,'기업/기관 수요'),(9,'신청내용2','관리자','2021-04-18',1,'test.zip','기업/기관 수요'),(10,'오늘날짜 테스트 공지사항','test','2021-05-11',3,NULL,'공지사항'),(11,'오늘날짜 테스트 서식','test','2021-05-11',6,NULL,'서식'),(12,'오늘날짜 테스트2 서식','test','2021-05-11',2,NULL,'서식'),(13,'totay cnt test','김무성','2021-05-11',0,'a.txt','공지사항'),(14,'글쓰기 기능 테스트1 - 첨부파일 포함','김무성','2021-05-15',1,'test.txt','공지사항'),(15,'글쓰기 기능 테스트2 - 첨부파일 미포함','김무성','2021-05-15',0,'','공지사항');
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `posttext` (
   PRIMARY KEY (`textno`),
   KEY `no` (`no`),
   CONSTRAINT `posttext_ibfk_1` FOREIGN KEY (`no`) REFERENCES `post` (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `posttext` (
 
 LOCK TABLES `posttext` WRITE;
 /*!40000 ALTER TABLE `posttext` DISABLE KEYS */;
-INSERT INTO `posttext` VALUES (1,1,'외래키 제약조건은 한 마디로 말해서 두 테이블간의 관계를 선언하여 데이터간의 무결성을 보장해주는 역할을 합니다. 즉 외래키 관계를 설정하면 하나의 테이블이 다른 테이블에 의존하는 형태입니다.'),(2,2,'내용2'),(3,3,'공지사항3'),(4,4,'공지사항4'),(5,5,'공지사항 내용'),(6,6,'내용'),(7,7,'내용1'),(8,8,'내용2'),(9,9,'내용3'),(10,10,'내용4'),(11,11,'내용5'),(12,12,'내용6'),(13,13,'내용7');
+INSERT INTO `posttext` VALUES (1,1,'외래키 제약조건은 한 마디로 말해서 두 테이블간의 관계를 선언하여 데이터간의 무결성을 보장해주는 역할을 합니다. 즉 외래키 관계를 설정하면 하나의 테이블이 다른 테이블에 의존하는 형태입니다.'),(2,2,'내용2'),(3,3,'공지사항3'),(4,4,'공지사항4'),(5,5,'공지사항 내용'),(6,6,'내용'),(7,7,'내용1'),(8,8,'내용2'),(9,9,'내용3'),(10,10,'내용4'),(11,11,'내용5'),(12,12,'내용6'),(13,13,'내용7'),(14,14,'글쓰기 테스트입니다.'),(15,15,'글쓰기 테스트입니다. (2)');
 /*!40000 ALTER TABLE `posttext` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,7 +110,7 @@ CREATE TABLE `user` (
   `upasswd` varchar(20) NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `uid_UNIQUE` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,4 +132,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-15 19:10:42
+-- Dump completed on 2021-05-16 14:20:17
